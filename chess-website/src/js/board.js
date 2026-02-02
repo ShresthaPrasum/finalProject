@@ -94,10 +94,10 @@ function render(){
 }
 
 function getValidMoves(row,col,piece){
-    const pieces = board[row][col];
+    const piececode = board[row][col];
     const piececolor = getpiececolor(piece);
     const moves = [];
-    switch(pieces[1]){
+    switch(piececode[1]){
         case 'P':
             if(piececolor === 'white' && row === 6){
                 if(!board[row-1][col] && !board[row-2][col]){
@@ -124,17 +124,36 @@ function getValidMoves(row,col,piece){
                 let r = row + dx;
                 let c = col + dy;
                 while(r >=0 && r<8 && c>=0 && c<8){
-                    moves.push([r,c]);
+                    if(!board[r][c]){
+                        moves.push([r,c]);
+                    }
+                    else{
+                        if(getpiececolor(board[r][c]) !== piececolor){
+                            moves.push([r,c]);
+                        }
+                        break;
+                    }
+                    r+=dx;
+                    c+=dy;
                 }
             break
         }
         case 'N':
             const Ndirection = [[-2,-1],[-2,1],[-1,-2],[-1,2],[1,-2],[1,2],[2,-1],[2,1]];
             for(const [dx,dy] of Ndirection){
-                const r = row + dx;
-                const c = col + dy;
+                let r = row + dx;
+                let c = col + dy;
+            
                 if(r >=0 && r<8 && c>=0 && c<8){
-                    moves.push([r,c]);
+                    if(!board[r][c]){
+                        moves.push([r,c]);
+                    }
+                    else{
+                        if(getpiececolor(board[r][c]) !== piececolor){
+                            moves.push([r,c]);
+                        }
+                        break;
+                    }
                 }
             break
         }
@@ -143,10 +162,58 @@ function getValidMoves(row,col,piece){
             for(const [dx,dy] of Bdirections){
                 let r = row + dx;
                 let c = col + dy;
-                if(r >=0 && r<8 && c>=0 && c<8){
-                    moves.push([r,c]);
+                while(r >=0 && r<8 && c>=0 && c<8){
+                    if(!board[r][c]){
+                        moves.push([r,c]);
+                    }
+                    else{
+                        if(getpiececolor(board[r][c]) !== piececolor){
+                            moves.push([r,c]);
+                        }
+                        break;
+                    }
+                    r+=dx;
+                    c+=dy;
                 }
             break
+        }
+        case 'Q':
+            const Qdirections = [[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]];
+            for(const [dx,dy] of Qdirections){
+                let r = row+dx;
+                let c =col+dy;
+                while(r >=0 && r<8 && c>=0 && c<8){
+                    if(!board[r][c]){
+                        moves.push([r,c]);
+                    }
+                    else{
+                        if(getpiececolor(board[r][c]) !== piececolor){
+                            moves.push([r,c]);
+                        }
+
+                    }
+                    r+=dx;
+                    c+dy;
+            }
+            break
+        }
+        case 'K':{
+            const Kdirections = [[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]];
+            for(const[dx,dy] of Kdirections){
+                const r = row+dx;
+                const c = col+dy;
+                if(r>=0 &&r<8 && c>=0 && c<8){
+                    if(!board[r][c]){
+                        moves.push([r,c]);
+                    }
+                    else{
+                        if(getpiececolor(board[r][c]) !== piececolor){
+                            moves.push([r,c]);
+                        }
+                    }
+                }
+            }
+            break;
         }
 
 
@@ -163,12 +230,18 @@ function highlightSquareDot(event){
 
     const piece = board[row][col]
 
+    if(!piece){
+        return;
+    }
+
     const piececolor = getpiececolor(piece);
 
-    if(piececolor === currentTurn){
-        getValidMoves(row,col,piece)
+    // if(piececolor === currentTurn){
+    getValidMoves(row,col,piece)
 
-    }
+    console.log(row,col)
+
+    // }
 }
 
 
