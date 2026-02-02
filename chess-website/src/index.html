@@ -2,36 +2,157 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="CONTENT-TYPE" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chess Game</title>
-  <link rel="stylesheet" href="css/styles.css">
+  <title>Sigma Chess</title>
   <style>
     *{
-      padding: 0;
       margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Arial', sans-serif;
     }
-    body {
+
+    body{
       height: 100vh;
-      font-family: Arial, sans-serif;
-      background-color: #f0f0f0;
+      background-color: #1d4a78;
+      overflow-y: hidden;
     }
-    .header {
-      background-color: #333;
+
+    .header{
+      background-color: #1d4a78;
       color: white;
       padding: 10px;
       text-align: center;
-      font-size: 24px;
     }
+    .header h1{
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+
+
+    .chess-board{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .container{
+      display: flex;
+      width: 40%;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .white, .black{
+      color: white;
+      padding: 10px 20px;
+      font-size: 1.1rem;
+      background-color: #1d4a78;
+      border-radius: 5px;
+      min-width: 200px;
+      text-align: center;
+    }
+
+    .white{
+      margin-top: 10px;
+    }
+
+    .black{
+      margin-bottom: 10px;
+
+    }
+    .board{
+      display: grid;
+      grid-template-columns: repeat(8,70px);
+      grid-template-rows: repeat(8,70px);
+      border: 4px solid rgba(134, 131, 124, 0.552);
+      border: #1d4a78;
+      
+    }
+    .square{
+      width: 70px;
+      height: 70px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 45px;
+      cursor: pointer;
+      user-select: none;
+      position: relative;
+    }
+    .square img{
+      width: 70px;
+
+    }
+    .light{
+      background-color: white;
+    }
+    .dark{
+      background-color: rgba(0, 255, 255, 0.385);
+    }
+
+    .square:hover{
+      opacity: 0.8;
+    }
+
+    .moves {
+      background-color: #2d5a88;
+      border-radius: 8px;
+      padding: 15px;
+      width: 20%;
+      min-height: 490px;
+    }
+
+    .moves h4{
+      color: white;
+      margin-bottom: 10px;
+      text-align: center;
+      padding-bottom: 8px;
+    }
+
+    .moves-containre{
+      color: #ddd;
+      font-size: 0.9rem;
+    }
+
+    .turn-indicator{
+      color: white;
+      text-align: center;
+      margin: 10px 0;
+      font-size: 1.2rem;
+    }
+
   </style>
 </head>
 <body>
   <div class="header">
-
+    <h1>
+      Sigma Chess
+    </h1>
   </div>
-  <script src="js/pieces.js"></script>
+
+  <div class="chess-board">
+    <div class="container">
+     
+      <div class="board">
+  
+      </div>
+    </div>
+    <div class="moves">
+      <h4>Move History</h4>
+      <div class="turn-indicator">
+        <h4>White Turn</h4>
+      </div>
+      <div class="moves-container">
+  
+      </div>
+    </div>
+ 
+
+    
+  </div>
+  
   <script src="js/board.js"></script>
-  <script src="js/moves.js"></script>
-  <script src="js/game.js"></script>
-  <script src="js/main.js"></script>
+
 </body>
 </html>
