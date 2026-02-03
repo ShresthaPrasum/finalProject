@@ -160,7 +160,6 @@ function getValidMoves(row,col,piece){
                 if(r >=0 && r<8 && c>=0 && c<8){
                     if(!board[r][c]){
                         moves.push([r,c]);
-
                     }   
                     else{
                         if(getpiececolor(board[r][c]) !== piececolor){
@@ -236,27 +235,53 @@ function getValidMoves(row,col,piece){
             break;
         }
 
+        
 
  
     }
+    
     return moves;
 }
 
+
+
+
 function clearHighlightSquares(){
     document.querySelectorAll(".square").forEach(square=>{
-        square.classList.remove("selected",'valid-moves')
+        square.classList.remove("selected",'valid-move')
     })
 }
 
-function movePiece(fr,fc,tr,tc){
-    board[tr][tc] = board[fr][fc];
-    board[fr][fc] = null;
-
-    currentTurn = currentTurn ==='white'? "black":"white";
-
-    updateBoard();
-
+function kingInCheck(color){
+    let kingRow = null;
+    let kingCol = null;
+        for(let row = 0;row<8;row++){
+            for(let col= 0;col<8;col++){
+                const piece = board[row][col];
+                if(piece && piece[1]==='K' && getpiececolor(piece)===color){
+                    kingRow = row;
+                    kingCol = col;
+                    break;
+                }
+            }
+        }
+        
+        for(let row = 0;row<8;row++){
+            for(let col = 0;col <8;col++){
+                const piece = board[row][col];
+                if(piece && getpiececolor(piece)!==color){
+                    const moves = getValidMoves(row,col,piece)
+                    if(moves.some(([r,c])=>r===kingRow && c===kingCol)){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
 }
+    
+
+
 
 function updateBoard(){
     for(let row = 0; row<8;row++){
@@ -274,6 +299,23 @@ function updateBoard(){
     }
     clearHighlightSquares();
 }
+
+function movePiece(fr,fc,tr,tc){
+    console.log(board)
+    board[tr][tc] = board[fr][fc];
+    board[fr][fc] = null;
+
+    if(kingInCheck(currentTurn)){
+        board[fr][fc] = board[tr][tc];
+        alert(currentTurn+" King is in Check")
+        return;
+    }
+    currentTurn = currentTurn ==='white'? "black":"white";
+    updateBoard();
+
+}
+
+
 
 function highlightSquareDot(event){
     const square = event.currentTarget;
@@ -315,17 +357,15 @@ function highlightSquareDot(event){
     moves.forEach(([r,c])=>{
         const targetSquare = document.querySelector(`[data-row="${r}"][data-col="${c}"]`);
         if(targetSquare){
-            targetSquare.classList.add('valid-moves')
+            targetSquare.classList.add('valid-move')
         }
     })
-    
-
-    // }
 }
 
 
 
 
 
-initBoard()
+
+initBoard();
 render();
