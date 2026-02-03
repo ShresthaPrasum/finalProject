@@ -94,6 +94,21 @@
     .square:hover{
       opacity: 0.8;
     }
+    .square.selected{
+      background-color: aqua;
+    }
+    .square.valid-moves{
+      position: relative;
+    }
+    .square.valid-moves::after{
+      content: "";
+      position: absolute;
+      width: 30%;
+      height: 30%;
+      background-color: rgba(0, 0, 0, 0.363);
+      border-radius: 50%;
+      
+    }
 
     .moves {
       background-color: #2d5a88;

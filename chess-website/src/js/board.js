@@ -98,27 +98,37 @@ function getValidMoves(row,col,piece){
     const piececolor = getpiececolor(piece);
     const moves = [];
     switch(piececode[1]){
-        case 'P':
-            if(piececolor === 'white' && row === 6){
-                if(!board[row-1][col] && !board[row-2][col]){
-                    moves.push([row-2,col]);
+
+        case 'P': {
+            const direction = piececolor === 'white' ? -1 : 1;
+            const startRow = piececolor === 'white' ? 6 : 1;
+            const nextRow = row + direction;
+
+            // Single move forward
+            if (nextRow >= 0 && nextRow < 8 && !board[nextRow][col]) {
+                moves.push([nextRow, col]);
+
+                // Double move from starting position
+                if (row === startRow && !board[row + 2 * direction][col]) {
+                    moves.push([row + 2 * direction, col]);
                 }
             }
-            else if(piececolor === 'black' && row ===1){
-                if(!board[row+1][col] && !board[row+2][col]){
-                    moves.push([row+2,col]);
+
+            // Diagonal captures
+            for (const dc of [-1, 1]) {
+                const captureCol = col + dc;
+                if (captureCol >= 0 && captureCol < 8 && nextRow >= 0 && nextRow < 8) {
+                    const target = board[nextRow][captureCol];
+                    if (target && getpiececolor(target) !== piececolor) {
+                        moves.push([nextRow, captureCol]);
+                    }
                 }
             }
-            else{
-                const Rdirection = piececolor === 'white' ? -1 : 1;
-                const nextRow = row + Rdirection;
-                if(nextRow >=0 && nextRow <8 && !board[nextRow][col]){
-                moves.push([nextRow,col]);
-                
-            }
-            break
+            break;
         }
-        case 'R':
+        case 'R':{
+
+        
             const Rdirections = [[1,0],[-1,0],[0,1],[0,-1]];
             for(const [dx,dy] of Rdirections){
                 let r = row + dx;
@@ -136,9 +146,12 @@ function getValidMoves(row,col,piece){
                     r+=dx;
                     c+=dy;
                 }
-            break
+            }
+            break;
         }
-        case 'N':
+        case 'N':{
+
+        
             const Ndirection = [[-2,-1],[-2,1],[-1,-2],[-1,2],[1,-2],[1,2],[2,-1],[2,1]];
             for(const [dx,dy] of Ndirection){
                 let r = row + dx;
@@ -147,17 +160,20 @@ function getValidMoves(row,col,piece){
                 if(r >=0 && r<8 && c>=0 && c<8){
                     if(!board[r][c]){
                         moves.push([r,c]);
-                    }
+
+                    }   
                     else{
                         if(getpiececolor(board[r][c]) !== piececolor){
                             moves.push([r,c]);
                         }
-                        break;
                     }
                 }
-            break
+            }
+            break;
         }
-        case 'B':
+        case 'B':{
+
+       
             const Bdirections = [[1,1],[1,-1],[-1,1],[-1,-1]];
             for(const [dx,dy] of Bdirections){
                 let r = row + dx;
@@ -175,9 +191,12 @@ function getValidMoves(row,col,piece){
                     r+=dx;
                     c+=dy;
                 }
-            break
-        }
-        case 'Q':
+            }
+            break;
+         }
+        case 'Q':{
+
+       
             const Qdirections = [[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]];
             for(const [dx,dy] of Qdirections){
                 let r = row+dx;
@@ -190,12 +209,13 @@ function getValidMoves(row,col,piece){
                         if(getpiececolor(board[r][c]) !== piececolor){
                             moves.push([r,c]);
                         }
-
+                        break;
                     }
                     r+=dx;
-                    c+dy;
+                    c+=dy;
             }
-            break
+        }
+        break;
         }
         case 'K':{
             const Kdirections = [[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]];
@@ -219,7 +239,40 @@ function getValidMoves(row,col,piece){
 
  
     }
-    console.log(moves)
+    return moves;
+}
+
+function clearHighlightSquares(){
+    document.querySelectorAll(".square").forEach(square=>{
+        square.classList.remove("selected",'valid-moves')
+    })
+}
+
+function movePiece(fr,fc,tr,tc){
+    board[tr][tc] = board[fr][fc];
+    board[fr][fc] = null;
+
+    currentTurn = currentTurn ==='white'? "black":"white";
+
+    updateBoard();
+
+}
+
+function updateBoard(){
+    for(let row = 0; row<8;row++){
+        for(let col = 0;col<8;col++){
+            const square = document.querySelector(`[data-row="${row}"][data-col="${col}"]`)
+            const img =square.querySelector("img");
+            const piece = board[row][col]
+            if(piece){
+                img.src = getPieceImage(piece);
+            }
+            else{
+                img.src = "";
+            }
+        }
+    }
+    clearHighlightSquares();
 }
 
 function highlightSquareDot(event){
@@ -230,25 +283,46 @@ function highlightSquareDot(event){
 
     const piece = board[row][col]
 
+    clearHighlightSquares();
+
+    if(selectedSquare){
+        const moves = getValidMoves(selectedSquare.row,selectedSquare.col,board[selectedSquare.row][selectedSquare.col])
+    
+        const isValidMoves = moves.some(([r,c])=> r===row && c===col);
+
+        if(isValidMoves){
+            movePiece(selectedSquare.row,selectedSquare.col,row,col);
+            selectedSquare = null;
+            return;
+        }
+    }
+
     if(!piece){
         return;
     }
 
     const piececolor = getpiececolor(piece);
 
-    // if(piececolor === currentTurn){
-    getValidMoves(row,col,piece)
+    if(piececolor !== currentTurn){
+        selectedSquare =null;
+        return;
+    }
 
-    console.log(row,col)
+    square.classList.add("selected")
+    selectedSquare = {row,col};
+
+    const moves = getValidMoves(row,col,piece);
+    moves.forEach(([r,c])=>{
+        const targetSquare = document.querySelector(`[data-row="${r}"][data-col="${c}"]`);
+        if(targetSquare){
+            targetSquare.classList.add('valid-moves')
+        }
+    })
+    
 
     // }
 }
 
-
-function handleClick(row,col){
-    const piece = board[row][col];
-    const piececolor = getpiececolor(piece);
-}
 
 
 
