@@ -33,7 +33,7 @@
 
     .chess-board{
       display: flex;
-      justify-content: center;
+      justify-content: space-around;
       align-items: center;
     }
     .container{
@@ -137,6 +137,25 @@
       font-size: 1.2rem;
     }
 
+    .restart{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      height: 80%;
+      z-index: 99;
+    }
+    .resetbtn{
+      display: none;
+      padding: 10px 20px;
+      font-size: 1.1rem;
+      background-color: #1d4b78;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
   </style>
 </head>
 <body>
@@ -148,7 +167,9 @@
 
   <div class="chess-board">
     <div class="container">
-     
+     <div class="restart">
+        <button class="resetbtn">Restart Game</button>
+     </div>
       <div class="board">
   
       </div>

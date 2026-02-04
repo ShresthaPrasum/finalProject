@@ -39,6 +39,11 @@ const Map = {
     'N': 'knight',
     'P': 'pawn'
 }
+const movehistory = [];
+
+const colLetters = ['a','b','c','d','e','f','g','h'];
+
+const restartBtn = document.querySelector(".resetbtn")
 
 function getpiececolor(pieceCode){
     return pieceCode[0] ==='w' ? 'white' : 'black';
@@ -235,9 +240,6 @@ function getValidMoves(row,col,piece){
             break;
         }
 
-        
-
- 
     }
     
     return moves;
@@ -301,18 +303,68 @@ function updateBoard(){
 }
 
 function movePiece(fr,fc,tr,tc){
-    console.log(board)
+    const movingPiece = board[fr][fc];
+    const targetPiece = board[tr][tc];
+
     board[tr][tc] = board[fr][fc];
     board[fr][fc] = null;
 
     if(kingInCheck(currentTurn)){
-        board[fr][fc] = board[tr][tc];
-        alert(currentTurn+" King is in Check")
-        return;
-    }
+            board[fr][fc]=movingPiece;
+            board[tr][tc]=targetPiece;
+            alert(currentTurn+" King is in Check")
+            return;
+        }
+
     currentTurn = currentTurn ==='white'? "black":"white";
     updateBoard();
 
+    if(kingInCheck(currentTurn)){
+        if(isCheckmate(currentTurn)){
+            alert("CHECKMATE! "+ (currentTurn ==='white' ? "BLACK":"WHITE") + " wins!");
+            restartBtn.style.display = 'block'
+            restartBtn.addEventListener('click',restart)
+            return;
+        }
+        else{
+            alert(currentTurn+" King is in Check");
+        }
+    }
+
+}
+
+function isCheckmate(color){
+    for(let row = 0;row<8;row++){
+        for(let col = 0;col<8;col++){
+            const piece = board[row][col]
+
+            if(piece && getpiececolor(piece)=== color){
+                let validMoves = getValidMoves(row,col,piece)
+
+                for(let i = 0; i < validMoves.length; i++){
+                    const move = validMoves[i];
+                    const tr = move[0];
+                    const tc = move[1];
+        
+                    const savePiece = board[tr][tc];
+        
+                    board[tr][tc] = board[row][col];
+                    board[row][col] = null;
+
+                    const stillInCheck = kingInCheck(color);
+
+                    board[row][col] = board[tr][tc];
+                    board[tr][tc] = savePiece;
+
+                    if(!stillInCheck){
+                        return false;
+                    }
+                }
+            } 
+        }
+        
+    }
+    return true;
 }
 
 
@@ -362,9 +414,20 @@ function highlightSquareDot(event){
     })
 }
 
+function restart(){
+    board = [];
+    currentTurn = "white";
+    selectedSquare= null;
 
+    const boardContainer = document.querySelector(".board")
+    boardContainer.innerHTML = '';
+    
+    initBoard();
+    render();
+    
+    restartBtn.style.display = 'none'
 
-
+}
 
 
 initBoard();
