@@ -45,6 +45,8 @@ const colLetters = ['a','b','c','d','e','f','g','h'];
 
 const restartBtn = document.querySelector(".resetbtn")
 
+const movehistoryContainer = document.querySelector(".moves-container");
+
 function getpiececolor(pieceCode){
     return pieceCode[0] ==='w' ? 'white' : 'black';
 }
@@ -109,17 +111,14 @@ function getValidMoves(row,col,piece){
             const startRow = piececolor === 'white' ? 6 : 1;
             const nextRow = row + direction;
 
-            // Single move forward
             if (nextRow >= 0 && nextRow < 8 && !board[nextRow][col]) {
                 moves.push([nextRow, col]);
 
-                // Double move from starting position
                 if (row === startRow && !board[row + 2 * direction][col]) {
                     moves.push([row + 2 * direction, col]);
                 }
             }
 
-            // Diagonal captures
             for (const dc of [-1, 1]) {
                 const captureCol = col + dc;
                 if (captureCol >= 0 && captureCol < 8 && nextRow >= 0 && nextRow < 8) {
@@ -302,11 +301,28 @@ function updateBoard(){
     clearHighlightSquares();
 }
 
-function movePiece(fr,fc,tr,tc){
+function movePiece(fr,fc,tr,tc,length){
     const movingPiece = board[fr][fc];
     const targetPiece = board[tr][tc];
 
     board[tr][tc] = board[fr][fc];
+    movehistory.push(`${colLetters[fc]}${8-fr}`);
+    movehistory.push(`${colLetters[tc]}${8-tr}`);
+    
+    let div = document.createElement('div')
+    div.className = 'move-entry'
+    movehistoryContainer.append(div)
+    let a = document.createElement('p')
+    div.append(a)
+    a.innerHTML = movehistory[length]
+    let b = document.createElement('p')
+    div.append(b)
+    b.innerHTML = ' to '
+    let c = document.createElement('p')
+    div.append(c)
+    c.innerHTML = movehistory[length + 1]
+
+
     board[fr][fc] = null;
 
     if(kingInCheck(currentTurn)){
@@ -385,7 +401,7 @@ function highlightSquareDot(event){
         const isValidMoves = moves.some(([r,c])=> r===row && c===col);
 
         if(isValidMoves){
-            movePiece(selectedSquare.row,selectedSquare.col,row,col);
+            movePiece(selectedSquare.row,selectedSquare.col,row,col,movehistory.length);
             selectedSquare = null;
             return;
         }
@@ -421,6 +437,7 @@ function restart(){
 
     const boardContainer = document.querySelector(".board")
     boardContainer.innerHTML = '';
+    movehistoryContainer.innerHTML = '';
     
     initBoard();
     render();
