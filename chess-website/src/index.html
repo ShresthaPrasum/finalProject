@@ -172,6 +172,7 @@
       width: 100%;
       max-width: 560px;
       aspect-ratio: 1/1;
+      color: white;
 
     }
     .alphabets{
@@ -179,7 +180,6 @@
       flex-direction: row;
       justify-content: space-between;
       width: 100%;
-      color: black;
       font-size: 1rem;
       font-weight: bold;
       position: absolute;
@@ -192,7 +192,6 @@
       flex-direction: column;
       justify-content: space-between;
       height: 100%;
-      color: black;
       font-size: 1rem;
       font-weight: bold;
       position: absolute;
@@ -242,6 +241,14 @@
         max-width: 510px;
       }
     }
+    .logo{
+      position: fixed;
+      text-align: center;
+      color: white;
+      margin: 20px;
+      top: 0;
+      right: 0;
+    }
   </style>
 </head>
 <body>
@@ -286,17 +293,15 @@
     <div class="moves">
       <h4>Move History</h4>
       <div class="turn-indicator">
-        <h4>White Turn</h4>
+        <h4 id="turn-indicator">white turn</h4>
       </div>
       <div class="moves-container">
-  
       </div>
     </div>
- 
-
-    
   </div>
-  
+  <div class="logo">
+    <h5>Made by Prasum Shrestha</h5>
+  </div>
   <script src="js/board.js"></script>
 
 </body>

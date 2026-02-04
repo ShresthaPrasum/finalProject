@@ -333,6 +333,9 @@ function movePiece(fr,fc,tr,tc,length){
         }
 
     currentTurn = currentTurn ==='white'? "black":"white";
+
+    const turnIndicator = document.getElementById("turn-indicator");
+    turnIndicator.textContent = currentTurn + " turn";
     updateBoard();
 
     if(kingInCheck(currentTurn)){
