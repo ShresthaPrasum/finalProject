@@ -52,12 +52,8 @@ chess-website/
    ```
 
 3. **Run the application:**
-   - **Option 1:** Open `src/index.html` directly in your web browser
-   - **Option 2:** Use the development server
-     ```bash
-     npm start
-     ```
-   - **Option 3:** Use any local HTTP server
+
+   - **Option 1:** https://sigma-chess.netlify.app/
      
 
 ## How to Play
@@ -129,11 +125,9 @@ Contributions are welcome! To contribute:
 4. Push to the branch (`git push origin feature/YourFeature`)
 5. Open a Pull Request
 
-## License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Author
-Pratik
+Prasum Shrestha
 
 ## Support
 For issues, questions, or suggestions, please open an issue on the GitHub repository.
