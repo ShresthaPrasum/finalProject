@@ -1,19 +1,19 @@
 const pieces = {
     white:{
-        king: "assets/pieces-basic-svg/White/king-w.svg",
-        queen: "assets/pieces-basic-svg/White/queen-w.svg",
-        rook: "assets/pieces-basic-svg/White/rook-w.svg",
-        bishop: "assets/pieces-basic-svg/White/bishop-w.svg",
-        knight: "assets/pieces-basic-svg/White/knight-w.svg",
-        pawn: "assets/pieces-basic-svg/White/pawn-w.svg"
+        king: "chess-website/src/assets/pieces-basic-svg/White/king-w.svg",
+        queen: "chess-website/src/assets/pieces-basic-svg/White/queen-w.svg",
+        rook: "chess-website/src/assets/pieces-basic-svg/White/rook-w.svg",
+        bishop: "chess-website/src/assets/pieces-basic-svg/White/bishop-w.svg",
+        knight: "chess-website/src/assets/pieces-basic-svg/White/knight-w.svg",
+        pawn: "chess-website/src/assets/pieces-basic-svg/White/pawn-w.svg"
     }
     ,black:{
-        king: "assets/pieces-basic-svg/Black/king-b.svg",
-        queen: "assets/pieces-basic-svg/Black/queen-b.svg",
-        rook: "assets/pieces-basic-svg/Black/rook-b.svg",
-        bishop: "assets/pieces-basic-svg/Black/bishop-b.svg",
-        knight: "assets/pieces-basic-svg/Black/knight-b.svg",
-        pawn: "assets/pieces-basic-svg/Black/pawn-b.svg"
+        king: "chess-website/src/assets/pieces-basic-svg/Black/king-b.svg",
+        queen: "chess-website/src/assets/pieces-basic-svg/Black/queen-b.svg",
+        rook: "chess-website/src/assets/pieces-basic-svg/Black/rook-b.svg",
+        bishop: "chess-website/src/assets/pieces-basic-svg/Black/bishop-b.svg",
+        knight: "chess-website/src/assets/pieces-basic-svg/Black/knight-b.svg",
+        pawn: "chess-website/src/assets/pieces-basic-svg/Black/pawn-b.svg"
     }
 };
 
@@ -442,6 +442,9 @@ function restart(){
     boardContainer.innerHTML = '';
     movehistoryContainer.innerHTML = '';
     
+    const turnIndicator = document.getElementById("turn-indicator");
+    turnIndicator.textContent = "white turn";
+    
     initBoard();
     render();
     
@@ -449,6 +452,8 @@ function restart(){
 
 }
 
-
-initBoard();
-render();
+document.addEventListener('DOMContentLoaded', function() {
+    initBoard();
+    render();
+    restartBtn.addEventListener('click', restart);
+});
