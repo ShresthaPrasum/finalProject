@@ -1,7 +1,7 @@
 # Chess Website
 
 ## Overview
-A web-based interactive chess game built with vanilla JavaScript, HTML, and CSS. This project provides a fully functional chess experience with support for two-player gameplay, complete chess rule validation, and beautiful SVG-based chess piece graphics.
+This project is a reboot of my previous final web design assignment. After receiving feedback from my teacher that the original website was not good enough, I redesigned the project as a fully functional chess game using HTML, CSS, and JavaScript. The game includes interactive gameplay, valid move highlighting, piece movement logic, turn based play, move history , and check/checkmate detection.
 
 ## Features
 - ♟️ **Full Chess Rule Implementation** - Complete move validation including special moves
@@ -70,10 +70,6 @@ chess-website/
    - **Queen** - Moves any number of squares horizontally, vertically, or diagonally
    - **King** - Moves one square in any direction
 
-### Special Moves
-- **Castling** - Move your king and rook together under specific conditions
-- **En Passant** - Capture an opponent's pawn that has just moved two squares forward
-- **Pawn Promotion** - When a pawn reaches the opposite end of the board
 
 ### Game Controls
 - **Reset Game** - Click the "Reset" button to start a new game at any time
@@ -98,16 +94,11 @@ The main game engine handling:
 - **moveHistory** - Array of all moves made in the game
 
 ## Technologies Used
-- **HTML5** - Semantic markup for game interface
-- **CSS3** - Responsive styling and layout
-- **JavaScript (ES6+)** - Pure vanilla JS, no frameworks
-- **SVG** - Vector graphics for chess pieces
+- **HTML5**
+- **CSS3**
+- **JavaScript (ES6+)**
+- **SVG** 
 
-## Browser Support
-- Chrome/Chromium (latest)
-- Firefox (latest)
-- Safari (latest)
-- Edge (latest)
 
 ## Future Enhancements
 - AI opponent with difficulty levels
@@ -120,9 +111,9 @@ The main game engine handling:
 ## Contributing
 Contributions are welcome! To contribute:
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/YourFeature`)
-3. Commit your changes (`git commit -m 'Add YourFeature'`)
-4. Push to the branch (`git push origin feature/YourFeature`)
+2. Create a feature branch
+3. Commit your changes
+4. Push to the branch
 5. Open a Pull Request
 
 
