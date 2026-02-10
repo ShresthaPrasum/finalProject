@@ -1,99 +1,10 @@
-//Written By Ai\\
-
 # Chess Website
 
 ## Overview
 This project is a reboot of my previous final web design assignment. After receiving feedback from my teacher that the original website was not good enough, I redesigned the project as a fully functional chess game using HTML, CSS, and JavaScript. The game includes interactive gameplay, valid move highlighting, piece movement logic, turn based play, move history , and check/checkmate detection.
 
-## Features
-- ♟️ **Full Chess Rule Implementation** - Complete move validation including special moves
-
-- 🎮 **Two-Player Mode** - Play against a friend on the same device
-
-- 🎨 **Professional Graphics** - SVG-based chess pieces for clear, scalable rendering
-
-- 📱 **Responsive Design** - Works seamlessly on desktop and tablet devices
-
-- ♻️ **Game Reset** - Quick restart button to begin a new game
-
-- 📝 **Move History** - Track all moves made during the game
-
-## Project Structure
-```
-chess-website/
-├── src/
-│   ├── index.html                 # Main HTML document
-│   ├── css/
-│   │   └── styles.css            # Stylesheet for the chess board and UI
-│   ├── js/
-│   │   └── board.js              # Core game logic and board management
-│   └── assets/
-│       └── pieces-basic-svg/
-│           ├── Black/            # Black piece SVG files
-│           └── White/            # White piece SVG files
-├── package.json                   # Project metadata and dependencies
-└── README.md                      # This file
-```
-
-## Installation & Setup
-
-### Prerequisites
-- Modern web browser (Chrome, Firefox, Safari, or Edge)
-- Node.js and npm (optional, for running a local development server)
-
-### Quick Start
-1. **Clone the repository:**
-   ```bash
-   git clone <repository-url>
-   cd chess-website
-   ```
-
-2. **Install dependencies (optional):**
-   ```bash
-   npm install
-   ```
-
-3. **Run the application:**
-
-   - **Option 1:** https://sigma-chess.netlify.app/
-     
-
-## How to Play
-
-### Basic Rules
-1. **Starting Position** - The board begins in the standard chess setup with white pieces on the bottom and black pieces on the top
-2. **Turn-Based Gameplay** - White always moves first, then players alternate
-3. **Moving Pieces** - Click on a piece to select it, then click on a highlighted valid square to move it
-4. **Piece Movements:**
-   - **Pawn** - Moves forward one square (or two squares on first move)
-   - **Rook** - Moves any number of squares horizontally or vertically
-   - **Knight** - Moves in an L-shape (2 squares in one direction, 1 square perpendicular)
-   - **Bishop** - Moves any number of squares diagonally
-   - **Queen** - Moves any number of squares horizontally, vertically, or diagonally
-   - **King** - Moves one square in any direction
-
-
-### Game Controls
-- **Reset Game** - Click the "Reset" button to start a new game at any time
-- **Move History** - View all previous moves in the game history panel
-
-## Game Architecture
-
-### board.js
-The main game engine handling:
-- Board state management using a 2D array
-- Piece positioning and movement validation
-- Turn management
-- Move history tracking
-- SVG rendering of pieces
-- User interaction handling
-
-### Key Components
-- **INITIAL_SETUP** - Standard chess starting position
-- **pieces** - Object mapping piece types to their SVG asset paths
-- **board** - Current game state (8x8 array of pieces)
-- **currentTurn** - Tracks whose turn it is (white/black)
-- **moveHistory** - Array of all moves made in the game
+#Website link
+** https://sigma-chess.netlify.app/
 
 ## Technologies Used
 - **HTML5**
@@ -102,38 +13,14 @@ The main game engine handling:
 - **SVG** 
 
 
-## Future Enhancements
-- AI opponent with difficulty levels
-- Online multiplayer support
-- Game analysis and notation (PGN format)
-- Undo/redo moves functionality
-- Timer for timed games
-- Game saving and loading
-
-## Contributing
-Contributions are welcome! To contribute:
-1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Push to the branch
-5. Open a Pull Request
+# Future Enhancements
+ AI opponent with difficulty levels
+ Online multiplayer support
+Game analysis and notation (PGN format)
+Undo/redo moves functionality
+ Timer for timed games
+Game saving and loading
 
 
 ## Author
 Prasum Shrestha
-
-## Support
-For issues, questions, or suggestions, please open an issue on the GitHub repository.
-
----
-
-Enjoy playing chess! ♟️♚
-- The game will notify you of check, checkmate, or stalemate conditions.
-
-## Future Enhancements
-- Implement an AI opponent with varying difficulty levels.
-- Add user authentication for online play.
-- Create a leaderboard to track player scores.
-
-## Contributing
-Contributions are welcome! Please open an issue or submit a pull request for any enhancements or bug fixes.
