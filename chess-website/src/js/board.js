@@ -17,7 +17,7 @@ const pieces = {
     }
 };
 
-const INITIAL_SETUP = [
+const Board_Setup = [
       ['bR', 'bN', 'bB', 'bQ', 'bK', 'bB', 'bN', 'bR'],
       ['bP', 'bP', 'bP', 'bP', 'bP', 'bP', 'bP', 'bP'],
       [null, null, null, null, null, null, null, null],
@@ -30,8 +30,8 @@ const INITIAL_SETUP = [
 
 let board = [];
 let currentTurn = "white";
-let selectedSquare = null;
-const Map = {
+let SS = null;
+const representation = {
     'K': 'king',
     'Q': 'queen',
     'R': 'rook',
@@ -41,29 +41,29 @@ const Map = {
 }
 const movehistory = [];
 
-const colLetters = ['a','b','c','d','e','f','g','h'];
+const cLetters = ['a','b','c','d','e','f','g','h'];
 
 const restartBtn = document.querySelector(".resetbtn")
 
 const movehistoryContainer = document.querySelector(".moves-container");
 
-function getpiececolor(pieceCode){
+function getpiececor(pieceCode){
     return pieceCode[0] ==='w' ? 'white' : 'black';
 }
 
 function getPieceImage(pieceCode) {
-    const color = pieceCode[0] === 'w' ? 'white' : 'black';
+    const cor = pieceCode[0] === 'w' ? 'white' : 'black';
 
-    const type = Map[pieceCode[1]]
+    const type = representation[pieceCode[1]]
 
-    return pieces[color][type];
+    return pieces[cor][type];
 }
 
-function initBoard(){
-    for(let row=0;row<8;row++){
-        board[row] = [];
-        for(let col=0;col<8;col++){
-            board[row][col] = INITIAL_SETUP[row][col];        
+function startBoard(){
+    for(let r=0;r<8;r++){
+        board[r] = [];
+        for(let c=0;c<8;c++){
+            board[r][c] = Board_Setup[r][c];        
         }
     }
 }
@@ -71,25 +71,25 @@ function initBoard(){
 function render(){
     const boardContainer = document.querySelector(".board")
     
-    for(let row=0;row<8;row++){
-        for(let col=0;col<8;col++){
+    for(let r=0;r<8;r++){
+        for(let c=0;c<8;c++){
             let square = document.createElement("div")
             square.className = "square"
 
             let img = document.createElement("img")
             square.append(img)
             
-            if((row+col)%2 ===0){
+            if((r+c)%2 ===0){
                 square.className = 'square light'
             }
             else{
                 square.className = 'square dark'
             }
 
-            square.dataset.row = row;
-            square.dataset.col = col;
+            square.dataset.r = r;
+            square.dataset.c = c;
 
-            const piece = board[row][col];
+            const piece = board[r][c];
             if(piece){
                 img.src = getPieceImage(piece)
             }
@@ -100,31 +100,31 @@ function render(){
     }
 }
 
-function getValidMoves(row,col,piece){
-    const piececode = board[row][col];
-    const piececolor = getpiececolor(piece);
+function getValidMoves(r,c,piece){
+    const piececode = board[r][c];
+    const piececor = getpiececor(piece);
     const moves = [];
     switch(piececode[1]){
 
         case 'P': {
-            const direction = piececolor === 'white' ? -1 : 1;
-            const startRow = piececolor === 'white' ? 6 : 1;
-            const nextRow = row + direction;
+            const direction = piececor === 'white' ? -1 : 1;
+            const startr = piececor === 'white' ? 6 : 1;
+            const nextr = r + direction;
 
-            if (nextRow >= 0 && nextRow < 8 && !board[nextRow][col]) {
-                moves.push([nextRow, col]);
+            if (nextr >= 0 && nextr < 8 && !board[nextr][c]) {
+                moves.push([nextr, c]);
 
-                if (row === startRow && !board[row + 2 * direction][col]) {
-                    moves.push([row + 2 * direction, col]);
+                if (r === startr && !board[r + 2 * direction][c]) {
+                    moves.push([r + 2 * direction, c]);
                 }
             }
 
             for (const dc of [-1, 1]) {
-                const captureCol = col + dc;
-                if (captureCol >= 0 && captureCol < 8 && nextRow >= 0 && nextRow < 8) {
-                    const target = board[nextRow][captureCol];
-                    if (target && getpiececolor(target) !== piececolor) {
-                        moves.push([nextRow, captureCol]);
+                const capturec = c + dc;
+                if (capturec >= 0 && capturec < 8 && nextr >= 0 && nextr < 8) {
+                    const target = board[nextr][capturec];
+                    if (target && getpiececor(target) !== piececor) {
+                        moves.push([nextr, capturec]);
                     }
                 }
             }
@@ -135,14 +135,14 @@ function getValidMoves(row,col,piece){
         
             const Rdirections = [[1,0],[-1,0],[0,1],[0,-1]];
             for(const [dx,dy] of Rdirections){
-                let r = row + dx;
-                let c = col + dy;
+                let r = r + dx;
+                let c = c + dy;
                 while(r >=0 && r<8 && c>=0 && c<8){
                     if(!board[r][c]){
                         moves.push([r,c]);
                     }
                     else{
-                        if(getpiececolor(board[r][c]) !== piececolor){
+                        if(getpiececor(board[r][c]) !== piececor){
                             moves.push([r,c]);
                         }
                         break;
@@ -158,15 +158,15 @@ function getValidMoves(row,col,piece){
         
             const Ndirection = [[-2,-1],[-2,1],[-1,-2],[-1,2],[1,-2],[1,2],[2,-1],[2,1]];
             for(const [dx,dy] of Ndirection){
-                let r = row + dx;
-                let c = col + dy;
+                let r = r + dx;
+                let c = c + dy;
             
                 if(r >=0 && r<8 && c>=0 && c<8){
                     if(!board[r][c]){
                         moves.push([r,c]);
                     }   
                     else{
-                        if(getpiececolor(board[r][c]) !== piececolor){
+                        if(getpiececor(board[r][c]) !== piececor){
                             moves.push([r,c]);
                         }
                     }
@@ -179,14 +179,14 @@ function getValidMoves(row,col,piece){
        
             const Bdirections = [[1,1],[1,-1],[-1,1],[-1,-1]];
             for(const [dx,dy] of Bdirections){
-                let r = row + dx;
-                let c = col + dy;
+                let r = r + dx;
+                let c = c + dy;
                 while(r >=0 && r<8 && c>=0 && c<8){
                     if(!board[r][c]){
                         moves.push([r,c]);
                     }
                     else{
-                        if(getpiececolor(board[r][c]) !== piececolor){
+                        if(getpiececor(board[r][c]) !== piececor){
                             moves.push([r,c]);
                         }
                         break;
@@ -202,14 +202,14 @@ function getValidMoves(row,col,piece){
        
             const Qdirections = [[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]];
             for(const [dx,dy] of Qdirections){
-                let r = row+dx;
-                let c =col+dy;
+                let r = r+dx;
+                let c =c+dy;
                 while(r >=0 && r<8 && c>=0 && c<8){
                     if(!board[r][c]){
                         moves.push([r,c]);
                     }
                     else{
-                        if(getpiececolor(board[r][c]) !== piececolor){
+                        if(getpiececor(board[r][c]) !== piececor){
                             moves.push([r,c]);
                         }
                         break;
@@ -223,14 +223,14 @@ function getValidMoves(row,col,piece){
         case 'K':{
             const Kdirections = [[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]];
             for(const[dx,dy] of Kdirections){
-                const r = row+dx;
-                const c = col+dy;
+                const r = r+dx;
+                const c = c+dy;
                 if(r>=0 &&r<8 && c>=0 && c<8){
                     if(!board[r][c]){
                         moves.push([r,c]);
                     }
                     else{
-                        if(getpiececolor(board[r][c]) !== piececolor){
+                        if(getpiececor(board[r][c]) !== piececor){
                             moves.push([r,c]);
                         }
                     }
@@ -253,26 +253,26 @@ function clearHighlightSquares(){
     })
 }
 
-function kingInCheck(color){
-    let kingRow = null;
-    let kingCol = null;
-        for(let row = 0;row<8;row++){
-            for(let col= 0;col<8;col++){
-                const piece = board[row][col];
-                if(piece && piece[1]==='K' && getpiececolor(piece)===color){
-                    kingRow = row;
-                    kingCol = col;
+function kingInCheck(cor){
+    let kingr = null;
+    let kingc = null;
+        for(let r = 0;r<8;r++){
+            for(let c= 0;c<8;c++){
+                const piece = board[r][c];
+                if(piece && piece[1]==='K' && getpiececor(piece)===cor){
+                    kingr = r;
+                    kingc = c;
                     break;
                 }
             }
         }
         
-        for(let row = 0;row<8;row++){
-            for(let col = 0;col <8;col++){
-                const piece = board[row][col];
-                if(piece && getpiececolor(piece)!==color){
-                    const moves = getValidMoves(row,col,piece)
-                    if(moves.some(([r,c])=>r===kingRow && c===kingCol)){
+        for(let r = 0;r<8;r++){
+            for(let c = 0;c <8;c++){
+                const piece = board[r][c];
+                if(piece && getpiececor(piece)!==cor){
+                    const moves = getValidMoves(r,c,piece)
+                    if(moves.some(([r,c])=>r===kingr && c===kingc)){
                         return true;
                     }
                 }
@@ -285,11 +285,11 @@ function kingInCheck(color){
 
 
 function updateBoard(){
-    for(let row = 0; row<8;row++){
-        for(let col = 0;col<8;col++){
-            const square = document.querySelector(`[data-row="${row}"][data-col="${col}"]`)
+    for(let r = 0; r<8;r++){
+        for(let c = 0;c<8;c++){
+            const square = document.querySelector(`[data-r="${r}"][data-c="${c}"]`)
             const img =square.querySelector("img");
-            const piece = board[row][col]
+            const piece = board[r][c]
             if(piece){
                 img.src = getPieceImage(piece);
             }
@@ -302,12 +302,12 @@ function updateBoard(){
 }
 
 function movePiece(fr,fc,tr,tc,length){
-    const movingPiece = board[fr][fc];
-    const targetPiece = board[tr][tc];
+    const movingPiece = board[fr][fc]
+    const targetPiece = board[tr][tc]
 
     board[tr][tc] = board[fr][fc];
-    movehistory.push(`${colLetters[fc]}${8-fr}`);
-    movehistory.push(`${colLetters[tc]}${8-tr}`);
+    movehistory.push(`${cLetters[fc]}${8-fr}`);
+    movehistory.push(`${cLetters[tc]}${8-tr}`);
     
     let div = document.createElement('div')
     div.className = 'move-entry'
@@ -326,8 +326,8 @@ function movePiece(fr,fc,tr,tc,length){
     board[fr][fc] = null;
 
     if(kingInCheck(currentTurn)){
-            board[fr][fc]=movingPiece;
-            board[tr][tc]=targetPiece;
+            board[fr][fc]=movingPiece
+            board[tr][tc]=targetPiece
             alert(currentTurn+" King is in Check")
             return;
         }
@@ -336,47 +336,47 @@ function movePiece(fr,fc,tr,tc,length){
 
     const turnIndicator = document.getElementById("turn-indicator");
     turnIndicator.textContent = currentTurn + " turn";
-    updateBoard();
+    updateBoard()
 
     if(kingInCheck(currentTurn)){
         if(isCheckmate(currentTurn)){
             alert("CHECKMATE! "+ (currentTurn ==='white' ? "BLACK":"WHITE") + " wins!");
             restartBtn.style.display = 'block'
             restartBtn.addEventListener('click',restart)
-            return;
+            return
         }
         else{
-            alert(currentTurn+" King is in Check");
+            alert(currentTurn+" King is in Check")
         }
     }
 
 }
 
-function isCheckmate(color){
-    for(let row = 0;row<8;row++){
-        for(let col = 0;col<8;col++){
-            const piece = board[row][col]
+function isCheckmate(cor){
+    for(let r = 0;r<8;r++){
+        for(let c = 0;c<8;c++){
+            const piece = board[r][c]
 
-            if(piece && getpiececolor(piece)=== color){
-                let validMoves = getValidMoves(row,col,piece)
+            if(piece && getpiececor(piece)=== cor){
+                let validMoves = getValidMoves(r,c,piece)
 
                 for(let i = 0; i < validMoves.length; i++){
-                    const move = validMoves[i];
+                    const move = validMoves[i]
                     const tr = move[0];
                     const tc = move[1];
         
-                    const savePiece = board[tr][tc];
+                    const savePiece = board[tr][tc]
         
-                    board[tr][tc] = board[row][col];
-                    board[row][col] = null;
+                    board[tr][tc] = board[r][c]
+                    board[r][c] = null;
 
-                    const stillInCheck = kingInCheck(color);
+                    const stillInCheck = kingInCheck(cor);
 
-                    board[row][col] = board[tr][tc];
-                    board[tr][tc] = savePiece;
+                    board[r][c] = board[tr][tc];
+                    board[tr][tc] = savePiece
 
                     if(!stillInCheck){
-                        return false;
+                        return false
                     }
                 }
             } 
@@ -389,44 +389,44 @@ function isCheckmate(color){
 
 
 function highlightSquareDot(event){
-    const square = event.currentTarget;
+    const square = event.currentTarget
 
-    const row = Number(square.dataset.row);
-    const col = Number(square.dataset.col);
+    const r = Number(square.dataset.r)
+    const c = Number(square.dataset.c)
 
-    const piece = board[row][col]
+    const piece = board[r][c]
 
-    clearHighlightSquares();
+    clearHighlightSquares()
 
-    if(selectedSquare){
-        const moves = getValidMoves(selectedSquare.row,selectedSquare.col,board[selectedSquare.row][selectedSquare.col])
-    
-        const isValidMoves = moves.some(([r,c])=> r===row && c===col);
+    if(SS){
+        const moves = getValidMoves(SS.r,SS.c,board[SS.r][SS.c])
+
+        const isValidMoves = moves.some(([r,c])=> r===r && c===c)
 
         if(isValidMoves){
-            movePiece(selectedSquare.row,selectedSquare.col,row,col,movehistory.length);
-            selectedSquare = null;
+            movePiece(SS.r,SS.c,r,c,movehistory.length)
+            SS = null
             return;
         }
     }
 
     if(!piece){
-        return;
+        return
     }
 
-    const piececolor = getpiececolor(piece);
+    const piececor = getpiececor(piece);
 
-    if(piececolor !== currentTurn){
-        selectedSquare =null;
-        return;
+    if(piececor !== currentTurn){
+        SS =null
+        return
     }
 
     square.classList.add("selected")
-    selectedSquare = {row,col};
+    SS = {r,c}
 
-    const moves = getValidMoves(row,col,piece);
+    const moves = getValidMoves(r,c,piece)
     moves.forEach(([r,c])=>{
-        const targetSquare = document.querySelector(`[data-row="${r}"][data-col="${c}"]`);
+        const targetSquare = document.querySelector(`[data-r="${r}"][data-c="${c}"]`)
         if(targetSquare){
             targetSquare.classList.add('valid-move')
         }
@@ -434,26 +434,26 @@ function highlightSquareDot(event){
 }
 
 function restart(){
-    board = [];
-    currentTurn = "white";
-    selectedSquare= null;
+    board = []
+    currentTurn = "white"
+    SS= null;
 
     const boardContainer = document.querySelector(".board")
     boardContainer.innerHTML = '';
-    movehistoryContainer.innerHTML = '';
+    movehistoryContainer.innerHTML = ''
     
-    const turnIndicator = document.getElementById("turn-indicator");
-    turnIndicator.textContent = "white turn";
+    const turnIndicator = document.getElementById("turn-indicator")
+    turnIndicator.textContent = "white turn"
     
-    initBoard();
-    render();
+    startBoard()
+    render()
     
     restartBtn.style.display = 'none'
 
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    initBoard();
-    render();
+    startBoard();
+    render()
     restartBtn.addEventListener('click', restart);
 });
